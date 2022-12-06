@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+	<!-- Name the servlet (it's name is used in other elements to refer to this servlet.
+	     Specify the servlet's class that will be instantiated by the servlet container. -->
+	<servlet>
+		<servlet-name>RabbitCounter</servlet-name>
+		<servlet-class>lab.servlet.fibonnaci.RabbitCounterServlet</servlet-class>
+	</servlet>
+ 
+ 	<!-- Specify that the RabbitCounter servlet will process requests matching the
+ 	     patterns that begin http://<base-url>/rabbit/. The base url identifies the 
+ 	     server and port number, e.g. localhost:10000. -->
+	<servlet-mapping>
+		<servlet-name>RabbitCounter</servlet-name>
+		<url-pattern>/rabbit/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

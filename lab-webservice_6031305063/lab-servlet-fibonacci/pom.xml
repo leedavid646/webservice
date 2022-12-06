@@ -1,0 +1,125 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>th.ac.mfu</groupId>
+	<artifactId>lab-servlet-fibonnaci</artifactId>
+	<version>1.0</version>
+
+	<!-- Generate a WAR file when the 'package' lifecycle phase is executed. 
+		Note that because a WAR file is generated, the project must have a src/main/webapp/WEB-INF/web.xml 
+		descriptor to initialise the servlet container. -->
+	<packaging>war</packaging>
+
+
+	<properties>
+		<!-- Specify the servlet container port to listen on for incoming requests. -->
+		<servlet.container.port>10000</servlet.container.port>
+
+		<slf.version>1.7.25</slf.version>
+
+		<mvn.compiler.version>3.8.0</mvn.compiler.version>
+		<surefire.version>2.22.0</surefire.version>
+		<failsafe.version>2.22.0</failsafe.version>
+		<jetty.version>9.4.31.v20200723</jetty.version>
+
+	</properties>
+
+	<dependencies>
+		<!-- Basic servlet API. -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- JUnit. -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- Logging. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
+			</plugin>
+			<!-- Specify Java version -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${mvn.compiler.version}</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+				</configuration>
+			</plugin>
+
+			<!-- This runs unit-tests named without an "IT" suffix. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<configuration>
+					<argLine>
+						--illegal-access=permit
+					</argLine>
+					<excludes>
+						<exclude>**/*IT</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<httpConnector>
+						<port>${servlet.container.port}</port>
+					</httpConnector>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<stopPort>9000</stopPort>
+					<stopWait>10</stopWait>
+					<stopKey>STOP</stopKey>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
+		</plugins>
+	</build>
+
+</project>
